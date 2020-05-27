@@ -11,9 +11,22 @@ class MMAController(Controller):
         self.kp = np.diag((1, 1)) * [12, 6]
 
     def choose_model(self, x, u, x_dot):
-        error = []
-        for model in self.models:
-            pass
+        min = 1e9
+        best = 0
+        zeros = np.zeros((2, 2), dtype=np.float32)
+
+        for i, model in enumerate(self.models):
+            invM = np.linalg.inv(model.M(x))
+            A = np.concatenate([np.concatenate([zeros, np.eye(2)], 1),
+                                np.concatenate([zeros, -invM @ model.C(x)], 1)], 0)
+            b = np.concatenate([zeros, invM], 0)
+            x_m = A @ x[:, np.newaxis] + b @ u
+            dif = abs(x_m - x_dot)
+            sum = np.sum(dif)
+            if sum < min:
+                min = sum
+                best = i
+        self.i = best
 
     def calculate_control(self, x, q_d, q_d_dot, q_dd_dot):
 
