@@ -5,10 +5,10 @@ from models.manipulator_model import ManiuplatorModel
 class MMAController(Controller):
     def __init__(self, Tp):
         # Use parameters from manipulators/mm_planar_2dof.py
-        self.models = [ManiuplatorModel(Tp, 0.09, 0.05), ManiuplatorModel(Tp, 0.009, 0.01), ManiuplatorModel(Tp, 1, 0.3)]
+        self.models = [ManiuplatorModel(Tp, 0.1, 0.05), ManiuplatorModel(Tp, 0.010, 0.01), ManiuplatorModel(Tp, 1., 0.3)]
         self.i = 0
-        self.kd = np.diag((1, 1)) * [1, 1]
-        self.kp = np.diag((1, 1)) * [1, 1]
+        self.kd = np.diag((1, 1)) * [1.5, -1]
+        self.kp = np.diag((1, 1)) * [-1, 2]
 
     def choose_model(self, x, u, x_dot):
         min = 1e9
