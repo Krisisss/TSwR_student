@@ -20,7 +20,7 @@ t = np.linspace(start, end, int((end - start) / Tp))
 manipulator = MMPlanarManipulator2DOF(Tp)
 
 
-# TODO: Switch to MMAC as soon as you implement it
+
 controller = MMAController(Tp)
 #controller = DummyController(Tp)
 
