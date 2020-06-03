@@ -18,8 +18,8 @@ t = np.linspace(start, end, int((end - start) / Tp))
 manipulator = PlanarManipulator2DOF(Tp)
 
 # TODO: dobrac kp, kd
-kp1 = 0.
-kp2 = 0.
+kp1 = 0,
+kp2 = 0
 kd1 = 0.
 kd2 = 0.
 fl_controller = PDDecentralizedController(kp1, kd1)
