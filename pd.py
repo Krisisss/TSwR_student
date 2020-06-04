@@ -18,10 +18,10 @@ t = np.linspace(start, end, int((end - start) / Tp))
 manipulator = PlanarManipulator2DOF(Tp)
 
 # TODO: dobrac kp, kd
-kp1 = 0,
-kp2 = 0
-kd1 = 0.
-kd2 = 0.
+kp1 = 100.
+kp2 = 100.
+kd1 = 50.
+kd2 = 50.
 fl_controller = PDDecentralizedController(kp1, kd1)
 sl_controller = PDDecentralizedController(kp2, kd2)
 traj_gen = Poly3(np.array([0., 0.]), np.array([pi/4, pi/6]), end)
@@ -49,7 +49,6 @@ q_d, q_d_dot, q_d_ddot = traj_gen.generate(0.)
 x = odeint(system, np.concatenate([q_d, q_d_dot], 0), t)
 manipulator.plot(x)
 
-# TODO: zaimplementowac calculate control
 """
 You can add here some plots of the state 'x' (consists of q and q_dot), controls 'ctrl', desired trajectory 'Q_d'
 with respect to time 'T' to analyze what is going on in the system
