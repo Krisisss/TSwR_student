@@ -20,16 +20,16 @@ manipulator = PlanarManipulator2DOF(Tp)
 
 b_est_1 = 2.
 b_est_2 = 2.
-kp_1 = 1.
-kp_2 = 1.
-kd_1 = 1.
-kd_2 = 1.
+kp_1 = 100.
+kp_2 = 100.
+kd_1 = 1.5
+kd_2 = 1.5
 fl_controller = ADRController(b_est_1, kp_1, kd_1)
 sl_controller = ADRController(b_est_2, kp_2, kd_2)
 
 l1 = 0.5
 l2 = 0.5
-l3 = 0.
+l3 = 0.01
 A = np.array([[0., 1., 0.], [0., 0., 1.], [0., 0., 0.]])
 B1 = np.array([0., b_est_1, 0.])[:, np.newaxis]
 B2 = np.array([0., b_est_2, 0.])[:, np.newaxis]
