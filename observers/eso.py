@@ -10,5 +10,6 @@ class ESO:
     def compute_dot(self, eso_estimates, q, u):
         e = q - eso_estimates[0]
         ### TODO: Please implement me
+
         z_dot = None
         return z_dot

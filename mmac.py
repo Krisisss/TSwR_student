@@ -15,7 +15,7 @@ from trajectory_generators.poly3 import Poly3
 
 Tp = 0.01
 start = 0
-end = 6
+end = 3
 t = np.linspace(start, end, int((end - start) / Tp))
 manipulator = MMPlanarManipulator2DOF(Tp)
 
