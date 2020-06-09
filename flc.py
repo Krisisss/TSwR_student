@@ -19,8 +19,8 @@ manipulator = PlanarManipulator2DOF(Tp)
 """
 Switch to FeedbackLinearizationController as soon as you implement it
 """
-#controller = FeedbackLinearizationController(Tp)
-controller = DummyController(Tp)
+controller = FeedbackLinearizationController(Tp)
+# controller = DummyController(Tp)
 
 """
 Here you have some trajectory generators. You can use them to check your implementations.
@@ -41,7 +41,8 @@ def system(x, t):
     q_d, q_d_dot, q_d_ddot = traj_gen.generate(t)
     Q_d.append(q_d)
     print(q_d_ddot)
-    control = controller.calculate_control(x, q_d_ddot[:, np.newaxis])
+    # control = controller.calculate_control(x, q_d_ddot[:, np.newaxis])
+    control = controller.calculate_control(x, q_d[:, np.newaxis], q_d_dot[:, np.newaxis], q_d_ddot[:, np.newaxis])
     ctrl.append(control)
     x_dot = manipulator.x_dot(x, control)
     return x_dot[:, 0]
