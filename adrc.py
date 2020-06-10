@@ -12,6 +12,8 @@ from trajectory_generators.constant_torque import ConstantTorque
 from trajectory_generators.sinusonidal import Sinusoidal
 from trajectory_generators.poly3 import Poly3
 
+import scipy.linalg as la
+
 Tp = 0.001
 start = 0
 end = 3
@@ -26,10 +28,10 @@ kd_1 = 1.5
 kd_2 = 1.5
 fl_controller = ADRController(b_est_1, kp_1, kd_1)
 sl_controller = ADRController(b_est_2, kp_2, kd_2)
-
-l1 = 0.5
-l2 = 0.5
-l3 = 0.01
+p = 100
+l1 = 3*p
+l2 = 3*p**2
+l3 = p**3
 A = np.array([[0., 1., 0.], [0., 0., 1.], [0., 0., 0.]])
 B1 = np.array([0., b_est_1, 0.])[:, np.newaxis]
 B2 = np.array([0., b_est_2, 0.])[:, np.newaxis]
@@ -53,20 +55,25 @@ def system(x_and_eso, t):
     T.append(t)
     q_d, q_d_dot, q_d_ddot = traj_gen.generate(t)
     Q_d.append(q_d)
-    u1 = fl_controller.calculate_control(x[0], q_d[0], q_d_dot[0], q_d_ddot[0], fl_estimates)
-    u2 = sl_controller.calculate_control(x[1], q_d[1], q_d_dot[1], q_d_ddot[1], sl_estimates)
+    # u1 = fl_controller.calculate_control(x[0], q_d[0], q_d_dot[0], q_d_ddot[0], fl_estimates)
+    u1 = 0.5
+    # u2 = sl_controller.calculate_control(x[1], q_d[1], q_d_dot[1], q_d_ddot[1], sl_estimates)
+    u2 = 0.0
     control = np.stack([u1, u2])[:, np.newaxis]
     ctrl.append(control)
     fl_eso_dot = first_link_state_estimator.compute_dot(fl_estimates, x[0], u1)
     sl_eso_dot = second_link_state_estimator.compute_dot(sl_estimates, x[1], u2)
     x_dot = manipulator.x_dot(x, control)
     x_and_eso_dot = np.concatenate([x_dot, fl_eso_dot, sl_eso_dot])
+    print('x', x_and_eso[2:])
+    print('x_dot', x_and_eso_dot[2:])
     return x_and_eso_dot[:, 0]
 
 
 q_d, q_d_dot, q_d_ddot = traj_gen.generate(0.)
 x = odeint(system, [*q_d, *q_d_dot, 0., 0., 0., 0., 0., 0.], t, hmax=1e-3)
 manipulator.plot(x[:, :4])
+
 
 """
 You can add here some plots of the state 'x' (consists of q and q_dot), controls 'ctrl', desired trajectory 'Q_d'
